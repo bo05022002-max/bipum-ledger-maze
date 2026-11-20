@@ -265,7 +265,7 @@ function fbRefreshMailto(){$("fbMailto").href=fbMailtoHref();}
 function fbOpen(){
   if(fbDialog.open)return;
   $("fbPage").value=location.href;
-  $("fbEnv").value=["날짜 "+run.day,"화면 "+innerWidth+"x"+innerHeight,"보기 "+(covered?"일반":pane)].join(" · ");
+  $("fbEnv").value=["날짜 "+run.day,"화면 "+innerWidth+"x"+innerHeight,"보기 "+(covered?"일반":pane==="drawer"?"서랍":(maps[pane]?.name||pane)),"기기 "+navigator.userAgent.slice(0,120)].join(" · ");
   fbSet("","");fbSend.textContent="보내기";fbSend.disabled=false;fbBusy=false;clearTimeout(fbTimer);clearTimeout(fbWatch);
   fbRefreshMailto();fbDialog.showModal();
   setTimeout(()=>$("fbSubject").focus({preventScroll:true}),40);
