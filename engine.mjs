@@ -26,7 +26,7 @@ export const rooms = {
       H4:{type:"portal",to:"server",at:"G4"},
       H12:{type:"goal"}
     },
-    patrol:"A7 B7 C7 D7 E7 F7 G7 F7 E7 D7 C7 B7".split(" ")
+    patrol:"A11 B11 C11 D11 E11 F11 G11 F11 E11 D11 C11 B11".split(" ")
   },
   store: {
     name:"보관실", title:"별도 보관실 대장", cols:6, top:4, last:11, start:"A4",

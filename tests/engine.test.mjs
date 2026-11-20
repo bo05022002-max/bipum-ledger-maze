@@ -27,6 +27,36 @@ test("모든 시트의 칸·특수 칸 좌표가 시트 범위 안에 있다", (
   }
 });
 
+test("첫 안내(C6 인계 메모)는 순찰 칸을 밟지 않고 갈 수 있다", () => {
+  for (const id of roomOrder) {
+    const route = new Set(rooms[id].patrol);
+    const seen = new Set(["mainA4"]);
+    const queue = [{room:"main", cell:"A4"}];
+    while (queue.length) {
+      const {room, cell} = queue.shift();
+      for (const k of Object.keys(keys)) {
+        const [dx, dy] = keys[k];
+        const x = letters.indexOf(cell[0]) + dx, r = Number(cell.slice(1)) + dy;
+        const m = rooms[room];
+        if (x < 0 || x >= m.cols || r < m.top || r > m.last) continue;
+        const next = letters[x] + r;
+        if (isBlock(room, next) || route.has(next)) continue;
+        const dest = rooms[room].spots?.[next];
+        if (dest?.need) continue;
+        const id2 = room + next;
+        if (seen.has(id2)) continue;
+        seen.add(id2); queue.push({room, cell:next});
+      }
+      const spot = rooms[room].spots[cell];
+      if (spot?.type === "portal" && !seen.has(spot.to + spot.at)) {
+        seen.add(spot.to + spot.at); queue.push({room:spot.to, cell:spot.at});
+      }
+    }
+    if (id === "main") assert.ok(seen.has("mainC6"), "인계 메모에 순찰을 피해 갈 수 없음");
+    if (id === "main") assert.ok(seen.has("mainA6"), "출발 임시저장 칸에 순찰을 피해 갈 수 없음");
+  }
+});
+
 test("통로·메모·임시저장 칸은 순찰로에 깔리지 않는다", () => {
   for (const id of roomOrder) {
     const route = new Set(rooms[id].patrol);

@@ -1,6 +1,6 @@
 import {letters,keys,rewards,rooms,roomOrder,dailyPlan,resolveDay,newRun,patrol,nextPatrol,advance,
-  hasItem,isBlock,move,use,actionLabel,resultLabel,elapsed,summary,objective,resume} from "./engine.mjs";
-import {drawerRecords,saveReceipt} from "./records.mjs";
+  hasItem,isBlock,move,use,actionLabel,resultLabel,elapsed,summary,objective,resume} from "./engine.mjs?v=20261120d";
+import {drawerRecords,saveReceipt} from "./records.mjs?v=20261120d";
 
 const $=id=>document.getElementById(id);
 const sheet=$("sheet"),vp=$("viewport");
