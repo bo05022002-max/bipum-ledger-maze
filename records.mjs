@@ -1,4 +1,4 @@
-import {rewards} from "./engine.mjs?v=20261120f";
+import {rewards} from "./engine.mjs?v=20261120g";
 const prefix="bipum.maze.receipt.v3/";
 const legacyKeys=["bipum.maze.drawer.v1"];
 const legacyPrefixes=["bipum.maze.receipt.v2/","bipum.maze.receipt.v3/"];

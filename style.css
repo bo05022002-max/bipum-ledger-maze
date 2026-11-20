@@ -122,3 +122,12 @@
 .toast{position:fixed;top:92px;left:50%;transform:translateX(-50%);z-index:30;max-width:calc(100vw - 32px);padding:7px 15px;border-radius:4px;background:#1b4e86;color:#fff;font-size:.82rem;line-height:1.35;box-shadow:0 6px 18px rgba(10,30,50,.28);text-align:center}
 .toast.gain{background:#1a6044}
 @media (pointer:coarse),(max-width:700px){.toast{top:auto;bottom:78px;font-size:.78rem;padding:6px 12px}}
+
+/* 모바일 하단 조작줄: 확인 버튼은 넓게, 다시 시작은 아이콘 크기로 */
+@media (pointer:coarse),(max-width:700px){
+  .touchline button#touchAction{min-width:78px;font-size:.86rem;border-left:1px solid #70917b}
+  .touchline button#touchRestart{min-width:36px;font-size:1.05rem;border-left:1px solid #70917b}
+  .tabs{overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{min-width:56px;padding:0 8px}
+}
