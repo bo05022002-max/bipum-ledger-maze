@@ -15,11 +15,11 @@ https://bo05022002-max.github.io/bipum-ledger-maze/
 
 ## 의견 보내기
 
-화면 오른쪽 위 `💬 의견` 버튼을 누르면 개선 의견·버그 제보 창이 열립니다. 제목, 내용, 회신 받을 이메일(선택)을 적고 `보내기`를 누르면 정적 페이지에서도 [FormSubmit](https://formsubmit.co) 무료 폼 전달 서비스를 거쳐 `woong6.park@gmail.com`으로 전달됩니다(서버·계정 없음, AJAX 전송 후 결과를 화면에서 확인). 전송이 막힌 환경에서는 같은 창의 `메일 앱으로 보내기`(mailto) 링크로 보낼 수 있습니다.
+화면 오른쪽 위 `💬 의견` 버튼을 누르면 개선 의견·버그 제보 창이 열립니다. 제목, 내용, 회신 받을 이메일(선택)을 적고 `보내기`를 누르면 정적 페이지(서버·계정 없음)에서도 [FormSubmit](https://formsubmit.co) 무료 폼 전달 서비스를 거쳐 `woong6.park@gmail.com`으로 전달됩니다.
 
-- 받는 메일 주소는 페이지 소스에 그대로 두지 않고 `app.js`에서 조합합니다.
-- 스팸 봇 차단용 허니팟 필드(`_honey`)와 `_captcha=false`, `_subject`, `_template=table`을 함께 보냅니다.
-- 전송 성공 시 `thanks.html` 안내 문구는 AJAX 실패 시의 대체 경로(`_next`)로 쓰입니다.
+- 전송 방식: 폼을 화면 뒤의 숨은 iframe으로 POST하고, FormSubmit이 지정한 `_next`(=`thanks.html`)로 되돌아오면 그 페이지가 부모 창에 알려(`postMessage`) 창에 `보냈습니다` 를 표시합니다. 16초 안에 확인되지 않으면 같은 창의 `메일 앱으로 보내기`(mailto)를 안내합니다.
+- 받는 메일 주소는 페이지 소스에 그대로 두지 않습니다. FormSubmit이 발급한 대체 토큰(`formsubmit.co/<토큰>`)을 action에 쓰고, 실제 주소는 `app.js`에서 조합해 mailto에만 씁니다.
+- 스팸 봇 차단용 허니팟 필드(`_honey`)와 `_captcha=false`, `_subject`, `_template=table`, `페이지`, `환경`(날짜·화면 크기·보기 상태)을 함께 보냅니다.
 
 ## 검색 노출(SEO)
 
@@ -37,7 +37,7 @@ https://bo05022002-max.github.io/bipum-ledger-maze/
 | `app.js` | 화면 렌더링·입력 처리·의견 폼 전송 |
 | `engine.mjs` | 게임 규칙(맵, 순찰, 메모, 보상, 결과) |
 | `records.mjs` | 서랍 기록(로컬 저장) |
-| `thanks.html` | 의견 전송 안내 페이지(AJAX 실패 시 대체 경로) |
+| `thanks.html` | 의견 전송 완료 안내 페이지(`_next`, 부모 창에 전송 성공 알림) |
 | `robots.txt`, `sitemap.xml` | 검색 로봇 안내 |
 | `og.png` | 공유 미리보기 이미지 |
 

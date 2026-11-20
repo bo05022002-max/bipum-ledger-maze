@@ -250,9 +250,9 @@ async function copyResult(){
 }
 /* ── 💬 개선 의견 / 버그 제보 ── */
 const FB_MAIL=["woong6.park","gmail.com"].join("@");
-const FB_AJAX="https://formsubmit.co/ajax/"+FB_MAIL;
+const FB_ENDPOINT="https://formsubmit.co/d83b0ce6a217a9f7f21da579c2a7bd96";
 const fbDialog=$("feedbackDialog"),fbForm=$("feedbackForm"),fbStatus=$("fbStatus"),fbSend=$("fbSend");
-let fbBusy=false,fbTimer=0;
+let fbBusy=false,fbTimer=0,fbWatch=0;
 function fbSet(text,cls){fbStatus.textContent=text;fbStatus.className="fb-status"+(cls?" "+cls:"");}
 function fbMailtoHref(){
   const subject=$("fbSubject").value.trim(),body=$("fbBody").value.trim(),mail=$("fbEmail").value.trim();
@@ -266,39 +266,39 @@ function fbOpen(){
   if(fbDialog.open)return;
   $("fbPage").value=location.href;
   $("fbEnv").value=["날짜 "+run.day,"화면 "+innerWidth+"x"+innerHeight,"보기 "+(covered?"일반":pane)].join(" · ");
-  fbSet("","");fbSend.textContent="보내기";fbSend.disabled=false;fbBusy=false;clearTimeout(fbTimer);
+  fbSet("","");fbSend.textContent="보내기";fbSend.disabled=false;fbBusy=false;clearTimeout(fbTimer);clearTimeout(fbWatch);
   fbRefreshMailto();fbDialog.showModal();
   setTimeout(()=>$("fbSubject").focus({preventScroll:true}),40);
 }
-function fbClose(){clearTimeout(fbTimer);if(fbDialog.open)fbDialog.close();}
+function fbClose(){clearTimeout(fbTimer);clearTimeout(fbWatch);fbBusy=false;if(fbDialog.open)fbDialog.close();}
 function fbDone(){
-  clearTimeout(fbTimer);fbBusy=false;fbSend.disabled=true;fbSend.textContent="보냄";
+  clearTimeout(fbTimer);clearTimeout(fbWatch);fbBusy=false;fbSend.disabled=true;fbSend.textContent="보냄";
   fbSet("보냈습니다. 알려 주셔서 고맙습니다!","");
   for(const id of ["fbSubject","fbBody","fbEmail"])$(id).value="";
   fbRefreshMailto();
   fbTimer=setTimeout(fbClose,2600);
 }
 function fbFail(){
-  fbBusy=false;fbSend.disabled=false;fbSend.textContent="보내기";
+  clearTimeout(fbWatch);fbBusy=false;fbSend.disabled=false;fbSend.textContent="보내기";
   fbSet("전송을 확인하지 못했습니다. 잠시 뒤 다시 보내 보시거나 아래 ‘메일 앱으로 보내기’를 이용해 주세요.","err");
 }
-async function fbSubmit(event){
+function fbSubmit(event){
   event.preventDefault();
   if(fbBusy)return;
   const subject=$("fbSubject").value.trim(),body=$("fbBody").value.trim(),mail=$("fbEmail").value.trim();
   if(!subject||!body){fbSet("제목과 내용을 적어 주세요.","err");(subject?$("fbBody"):$("fbSubject")).focus();return;}
   if(mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)){fbSet("회신 이메일 주소 형식을 확인해 주세요.","err");$("fbEmail").focus();return;}
   fbBusy=true;fbSend.disabled=true;fbSend.textContent="보내는 중…";fbSet("보내는 중입니다…","busy");
-  const data={"_subject":"[비품대장] "+subject.slice(0,80),"_template":"table","_captcha":"false",
-    "제목":subject,"내용":body,"보낸곳":"비품대장 미로 게임","페이지":$("fbPage").value,"환경":$("fbEnv").value};
-  if(mail){data.email=mail;data._replyto=mail;data["회신 이메일"]=mail;}
-  try{
-    const response=await fetch(FB_AJAX,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)});
-    const result=await response.json().catch(()=>({}));
-    if(response.ok&&String(result.success)==="true"){fbDone();return;}
-  }catch(error){}
-  fbFail();
+  $("fbMailSubject").value="[비품대장] "+subject.slice(0,80);
+  fbForm.action=FB_ENDPOINT;
+  fbForm.setAttribute("target","feedbackSink");
+  HTMLFormElement.prototype.submit.call(fbForm);
+  fbWatch=setTimeout(fbFail,16000);
 }
+window.addEventListener("message",event=>{
+  if(event.origin!==location.origin||event.data!=="bipum-feedback-sent")return;
+  if(fbBusy)fbDone();
+});
 $("feedbackOpen").onclick=fbOpen;
 $("feedbackClose").onclick=fbClose;
 fbForm.addEventListener("submit",fbSubmit);
