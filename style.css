@@ -88,3 +88,30 @@
   .fb-note{padding:6px 13px 14px}
   .fb-field input,.fb-field textarea{font-size:16px}
 }
+
+/* ── 2차: 4시트 방탈출 ── */
+.sheet td.wallcell{background:repeating-linear-gradient(45deg,#4f6055 0 6px,#47574d 6px 12px);border-right-color:#3d4c43;border-bottom-color:#3d4c43;color:transparent;cursor:default}
+.sheet td.play{height:calc(30px * var(--cell-scale))}
+.sheet td.portalcell{background:#eaf2f9;color:#155c94;font-weight:700}
+.sheet td.savecell{background:#e4eefc;color:#1b4e86;font-weight:700}
+.sheet td.lockcell{background:#f7e9d8;color:#8a4a12;font-weight:700}
+.sheet td.dooropen{background:#e9f5ec;color:#1d6b41;font-weight:700}
+.sheet td.checkcell{background:#e7f4ec;color:#1a6044;font-weight:700}
+.sheet td.logcell{background:#eef2f8;color:#1c4a74;font-weight:700}
+.sheet td.goalcell{background:#dfeede;color:#14532d;font-weight:700}
+.sheet td.openedcell{color:#6a7a6f}
+.sheet td.guard{background:#f6ead9;color:#7c4418;font-weight:bold}
+.sheet td.guardfar{outline:2px dotted #c09462;outline-offset:-3px}
+.sheet td.previewonly{opacity:.9}
+.sheet td.sheethint{height:24px;background:#f6f8f6;color:#7c8b81;font-size:.74rem;padding-left:12px;border-top:1px solid #dfe6e0}
+.sheet .resumetip{color:#4b6355;font-size:.8rem}
+.tabs button.lockedtab{opacity:.5;cursor:not-allowed}
+.sheet.store{--cols-min:525px}
+@media (pointer:coarse),(max-width:700px){
+  .sheet{min-width:calc(680px * var(--cell-scale))}
+  .sheet.store{min-width:calc(540px * var(--cell-scale))}
+  .sheet.server{min-width:calc(600px * var(--cell-scale))}
+  .sheet td.play{height:calc(32px * var(--cell-scale));font-size:calc(.8rem * var(--cell-scale))}
+  .sheet td.savecell,.sheet td.portalcell{font-size:calc(.74rem * var(--cell-scale))}
+  .touchline button#touchRestart{min-width:34px;border-left:1px solid #70917b}
+}
