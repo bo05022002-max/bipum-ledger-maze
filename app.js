@@ -250,7 +250,7 @@ async function copyResult(){
 }
 /* ── 💬 개선 의견 / 버그 제보 ── */
 const FB_MAIL=["woong6.park","gmail.com"].join("@");
-const FB_ENDPOINT="https://formsubmit.co/d83b0ce6a217a9f7f21da579c2a7bd96";
+const FB_ENDPOINT="https://formsubmit.co/ajax/d83b0ce6a217a9f7f21da579c2a7bd96";
 const fbDialog=$("feedbackDialog"),fbForm=$("feedbackForm"),fbStatus=$("fbStatus"),fbSend=$("fbSend");
 let fbBusy=false,fbTimer=0,fbWatch=0;
 function fbSet(text,cls){fbStatus.textContent=text;fbStatus.className="fb-status"+(cls?" "+cls:"");}
@@ -278,27 +278,31 @@ function fbDone(){
   fbRefreshMailto();
   fbTimer=setTimeout(fbClose,2600);
 }
-function fbFail(){
+function fbFail(reason){
   clearTimeout(fbWatch);fbBusy=false;fbSend.disabled=false;fbSend.textContent="보내기";
-  fbSet("전송을 확인하지 못했습니다. 잠시 뒤 다시 보내 보시거나 아래 ‘메일 앱으로 보내기’를 이용해 주세요.","err");
+  fbSet(reason||"전송을 확인하지 못했습니다. 잠시 뒤 다시 보내 보시거나 아래 ‘메일 앱으로 보내기’를 이용해 주세요.","err");
 }
-function fbSubmit(event){
+async function fbSubmit(event){
   event.preventDefault();
   if(fbBusy)return;
   const subject=$("fbSubject").value.trim(),body=$("fbBody").value.trim(),mail=$("fbEmail").value.trim();
   if(!subject||!body){fbSet("제목과 내용을 적어 주세요.","err");(subject?$("fbBody"):$("fbSubject")).focus();return;}
   if(mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)){fbSet("회신 이메일 주소 형식을 확인해 주세요.","err");$("fbEmail").focus();return;}
   fbBusy=true;fbSend.disabled=true;fbSend.textContent="보내는 중…";fbSet("보내는 중입니다…","busy");
-  $("fbMailSubject").value="[비품대장] "+subject.slice(0,80);
-  fbForm.action=FB_ENDPOINT;
-  fbForm.setAttribute("target","feedbackSink");
-  HTMLFormElement.prototype.submit.call(fbForm);
-  fbWatch=setTimeout(fbFail,16000);
+  const data={"_subject":"[비품대장] "+subject.slice(0,80),"_template":"table","_captcha":"false",
+    "제목":subject,"내용":body,"보낸곳":"비품대장 미로 게임","페이지":$("fbPage").value,"환경":$("fbEnv").value};
+  if(mail){data.email=mail;data._replyto=mail;data["회신 이메일"]=mail;}
+  fbWatch=setTimeout(()=>{if(fbBusy)fbFail();},20000);
+  try{
+    const response=await fetch(FB_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)});
+    const result=await response.json().catch(()=>null);
+    if(response.ok&&result&&String(result.success)==="true"){fbDone();return;}
+    fbFail();
+  }catch(error){
+    fbFail();
+  }
 }
-window.addEventListener("message",event=>{
-  if(event.origin!==location.origin||event.data!=="bipum-feedback-sent")return;
-  if(fbBusy)fbDone();
-});
+window.addEventListener("online",()=>{if(fbDialog.open&&fbStatus.className.includes("err"))fbSet("","");});
 $("feedbackOpen").onclick=fbOpen;
 $("feedbackClose").onclick=fbClose;
 fbForm.addEventListener("submit",fbSubmit);

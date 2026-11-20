@@ -17,14 +17,14 @@ https://bo05022002-max.github.io/bipum-ledger-maze/
 
 화면 오른쪽 위 `💬 의견` 버튼을 누르면 개선 의견·버그 제보 창이 열립니다. 제목, 내용, 회신 받을 이메일(선택)을 적고 `보내기`를 누르면 정적 페이지(서버·계정 없음)에서도 [FormSubmit](https://formsubmit.co) 무료 폼 전달 서비스를 거쳐 `woong6.park@gmail.com`으로 전달됩니다.
 
-- 전송 방식: 폼을 화면 뒤의 숨은 iframe으로 POST하고, FormSubmit이 지정한 `_next`(=`thanks.html`)로 되돌아오면 그 페이지가 부모 창에 알려(`postMessage`) 창에 `보냈습니다` 를 표시합니다. 16초 안에 확인되지 않으면 같은 창의 `메일 앱으로 보내기`(mailto)를 안내합니다.
+- 전송 방식: `https://formsubmit.co/ajax/<토큰>`으로 `fetch` POST(JSON)하고, 돌아온 `{"success":"true"}` 응답을 확인했을 때만 창에 `보냈습니다`를 표시합니다. 20초 안에 확인되지 않거나 실패하면 같은 창의 `메일 앱으로 보내기`(mailto)를 안내합니다.
 - 받는 메일 주소는 페이지 소스에 그대로 두지 않습니다. FormSubmit이 발급한 대체 토큰(`formsubmit.co/<토큰>`)을 action에 쓰고, 실제 주소는 `app.js`에서 조합해 mailto에만 씁니다.
 - 스팸 봇 차단용 허니팟 필드(`_honey`)와 `_captcha=false`, `_subject`, `_template=table`, `페이지`, `환경`(날짜·화면 크기·보기 상태)을 함께 보냅니다.
 
 ## 검색 노출(SEO)
 
 - `index.html`: `description`, `keywords`, `canonical`, `robots`, Open Graph(`og:*`), Twitter 카드, `application/ld+json`(WebSite·VideoGame), 파비콘(SVG data URI), 화면 읽기용 `h1`과 `<noscript>` 소개 문단
-- `robots.txt`: 전체 허용 + `thanks.html` 제외 + 사이트맵 위치
+- `robots.txt`: 전체 허용 + 사이트맵 위치
 - `sitemap.xml`: 대표 URL 1건(`lastmod` 포함)
 - `og.png`: 공유 미리보기 이미지(1200×630)
 
@@ -37,7 +37,6 @@ https://bo05022002-max.github.io/bipum-ledger-maze/
 | `app.js` | 화면 렌더링·입력 처리·의견 폼 전송 |
 | `engine.mjs` | 게임 규칙(맵, 순찰, 메모, 보상, 결과) |
 | `records.mjs` | 서랍 기록(로컬 저장) |
-| `thanks.html` | 의견 전송 완료 안내 페이지(`_next`, 부모 창에 전송 성공 알림) |
 | `robots.txt`, `sitemap.xml` | 검색 로봇 안내 |
 | `og.png` | 공유 미리보기 이미지 |
 

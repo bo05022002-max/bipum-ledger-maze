@@ -50,7 +50,7 @@
 <div class="statusbar"><output id="status" aria-live="polite"></output><span id="progress"></span><span id="zoomtag" class="zoomtag">100%</span><div class="touchline" id="touchline"><button data-key="ArrowLeft" aria-label="왼쪽">←</button><button data-key="ArrowUp" aria-label="위">↑</button><button data-key="ArrowDown" aria-label="아래">↓</button><button data-key="ArrowRight" aria-label="오른쪽">→</button><button data-key="Enter" id="touchAction">확인</button></div></div>
 </footer>
 <dialog id="feedbackDialog" class="feedback" aria-labelledby="feedbackTitle">
-<form id="feedbackForm" method="post" action="https://formsubmit.co/d83b0ce6a217a9f7f21da579c2a7bd96" target="feedbackSink" novalidate>
+<form id="feedbackForm" method="post" novalidate>
 <div class="fb-head"><h2 id="feedbackTitle">💬 개선 의견 / 버그 제보</h2><button type="button" class="fb-close" id="feedbackClose" aria-label="닫기">×</button></div>
 <p class="fb-lead">불편했던 점, 이상하게 동작한 부분을 알려 주세요. 보내 주신 내용은 만든 사람의 메일함으로 그대로 전달됩니다.</p>
 <label class="fb-field"><span class="fb-label">제목</span><input id="fbSubject" name="제목" type="text" maxlength="80" required placeholder="예: 모바일에서 방향 버튼이 안 눌려요"></label>
@@ -59,7 +59,6 @@
 <input type="hidden" name="_subject" id="fbMailSubject" value="[비품대장] 새 의견">
 <input type="hidden" name="_template" value="table">
 <input type="hidden" name="_captcha" value="false">
-<input type="hidden" name="_next" value="https://bo05022002-max.github.io/bipum-ledger-maze/thanks.html">
 <input type="hidden" name="보낸곳" value="비품대장 미로 게임">
 <input type="hidden" name="페이지" id="fbPage" value="">
 <input type="hidden" name="환경" id="fbEnv" value="">
@@ -68,6 +67,5 @@
 <div class="fb-foot"><a class="fb-mailto" id="fbMailto" href="#">메일 앱으로 보내기</a><button type="submit" class="fb-send" id="fbSend">보내기</button></div>
 <p class="fb-note">보내기 버튼을 누르면 무료 폼 전달 서비스(FormSubmit)를 거쳐 전달됩니다. 광고나 다른 용도로 쓰이지 않습니다.</p>
 </form>
-<iframe name="feedbackSink" id="feedbackSink" title="전송 결과" hidden></iframe>
 </dialog>
 <script type="module" src="./app.js"></script></body></html>
