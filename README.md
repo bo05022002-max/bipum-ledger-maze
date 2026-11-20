@@ -18,8 +18,9 @@ https://bo05022002-max.github.io/bipum-ledger-maze/
 화면 오른쪽 위 `💬 의견` 버튼을 누르면 개선 의견·버그 제보 창이 열립니다. 제목, 내용, 회신 받을 이메일(선택)을 적고 `보내기`를 누르면 정적 페이지(서버·계정 없음)에서도 [FormSubmit](https://formsubmit.co) 무료 폼 전달 서비스를 거쳐 `woong6.park@gmail.com`으로 전달됩니다.
 
 - 전송 방식: `https://formsubmit.co/ajax/<토큰>`으로 `fetch` POST(JSON)하고, 돌아온 `{"success":"true"}` 응답을 확인했을 때만 창에 `보냈습니다`를 표시합니다. 20초 안에 확인되지 않거나 실패하면 같은 창의 `메일 앱으로 보내기`(mailto)를 안내합니다.
-- 받는 메일 주소는 페이지 소스에 그대로 두지 않습니다. FormSubmit이 발급한 대체 토큰(`formsubmit.co/<토큰>`)을 action에 쓰고, 실제 주소는 `app.js`에서 조합해 mailto에만 씁니다.
-- 스팸 봇 차단용 허니팟 필드(`_honey`)와 `_captcha=false`, `_subject`, `_template=table`, `페이지`, `환경`(날짜·화면 크기·보기 상태)을 함께 보냅니다.
+- 받는 메일 주소는 페이지 소스에 그대로 두지 않습니다. FormSubmit이 발급한 대체 토큰(`formsubmit.co/ajax/<토큰>`)을 전송 주소로 쓰고, 실제 주소는 `app.js`에서 조합해 mailto에만 씁니다.
+- 스팸 봇 차단용 숨김 필드(`#fbHoney`)에 값이 있으면 전송하지 않고 조용히 성공 화면만 보여 줍니다. `_captcha=false`, `_subject`, `_template=table`, `페이지`, `환경`(날짜·화면 크기·보기 상태·기기)을 함께 보냅니다.
+- `index.html`이 최대 10분 캐시되므로, 배포 후 화면이 그대로면 `?v=` 값을 올려 다시 배포하면 즉시 반영됩니다.
 
 ## 검색 노출(SEO)
 
