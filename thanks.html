@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#18583e">
+<title>의견 보냄 · 비품대장.xlsx 미로 게임</title>
+<meta name="robots" content="noindex,follow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%2318583e'/%3E%3Cpath d='M14 16h36v32H14z' fill='none' stroke='%23eaf3ec' stroke-width='3'/%3E%3Cpath d='M14 26h36M14 36h36M26 16v32M38 16v32' stroke='%23a8c9b5' stroke-width='2'/%3E%3C/svg%3E">
+<style>
+:root{font-family:"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",Arial,sans-serif;color:#202824;background:#fff;font-size:16px;--forest:#18583e;--green:#147348;--line:#d8dfda}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;background:#f6f8f6}
+.titlebar{height:43px;display:flex;align-items:center;gap:13px;padding:0 20px;background:var(--forest);color:#fff;font-size:.88rem}
+.appmark{width:23px;height:23px;border:1px solid #c6dfd0;display:grid;place-items:center;border-radius:4px;font-size:19px;line-height:1}
+.titlebar strong{font-weight:600}
+.wrap{flex:1;display:grid;place-items:center;padding:28px 18px}
+.card{width:min(520px,100%);border:1px solid #b9c9bf;border-radius:5px;background:#fff;box-shadow:0 10px 30px rgba(12,32,21,.1);overflow:hidden}
+.cardhead{padding:11px 18px;background:#eef4ef;border-bottom:1px solid var(--line);font-size:.84rem;font-weight:600;color:#2b5c40}
+.cardbody{padding:26px 22px 24px;text-align:center}
+.icon{width:44px;height:44px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;background:#e7f3ea;color:#16794b;font-size:22px;font-style:normal}
+h1{margin:0 0 10px;font-size:1.22rem;letter-spacing:-.02em}
+p{margin:0;font-size:.9rem;line-height:1.7;color:#4a5b50}
+.back{display:inline-flex;align-items:center;justify-content:center;min-height:38px;margin-top:20px;padding:8px 20px;border-radius:3px;background:var(--green);color:#fff;font-size:.88rem;font-weight:600;text-decoration:none}
+.back:hover{background:#116140}
+.foot{padding:0 18px 18px;font-size:.76rem;color:#728076;text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+<header class="titlebar"><span class="appmark" aria-hidden="true">▦</span><strong>비품관리대장.xlsx</strong></header>
+<main class="wrap">
+  <div class="card">
+    <div class="cardhead">개선 의견 / 버그 제보</div>
+    <div class="cardbody">
+      <i class="icon" aria-hidden="true">✓</i>
+      <h1>의견을 보냈습니다</h1>
+      <p>보내 주신 내용은 만든 사람의 메일함으로 전달됩니다.<br>회신 이메일을 적어 주셨다면 답장을 드릴 수 있습니다. 고맙습니다!</p>
+      <a class="back" href="./">게임으로 돌아가기</a>
+    </div>
+    <p class="foot">한 줄 남겨 주시면 다음 수정에 바로 반영합니다.</p>
+  </div>
+</main>
+<script>
+  try{ if(window.parent&&window.parent!==window) parent.postMessage("bipum-feedback-sent",location.origin); }catch(e){}
+</script>
+</body>
+</html>

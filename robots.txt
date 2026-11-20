@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /thanks.html
+
+Sitemap: https://bo05022002-max.github.io/bipum-ledger-maze/sitemap.xml

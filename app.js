@@ -248,6 +248,64 @@ async function copyResult(){
   }
   if(ok){copyMessage="복사 완료";paint();focusBoard();}
 }
+/* ── 💬 개선 의견 / 버그 제보 ── */
+const FB_MAIL=["woong6.park","gmail.com"].join("@");
+const FB_AJAX="https://formsubmit.co/ajax/"+FB_MAIL;
+const fbDialog=$("feedbackDialog"),fbForm=$("feedbackForm"),fbStatus=$("fbStatus"),fbSend=$("fbSend");
+let fbBusy=false,fbTimer=0;
+function fbSet(text,cls){fbStatus.textContent=text;fbStatus.className="fb-status"+(cls?" "+cls:"");}
+function fbMailtoHref(){
+  const subject=$("fbSubject").value.trim(),body=$("fbBody").value.trim(),mail=$("fbEmail").value.trim();
+  const lines=[body||"(내용을 적어 주세요)"];
+  if(mail)lines.push("","회신 받을 이메일: "+mail);
+  lines.push("","— 비품대장 미로 게임",location.href);
+  return "mailto:"+FB_MAIL+"?subject="+encodeURIComponent("[비품대장] "+(subject||"개선 의견"))+"&body="+encodeURIComponent(lines.join("\n"));
+}
+function fbRefreshMailto(){$("fbMailto").href=fbMailtoHref();}
+function fbOpen(){
+  if(fbDialog.open)return;
+  $("fbPage").value=location.href;
+  $("fbEnv").value=["날짜 "+run.day,"화면 "+innerWidth+"x"+innerHeight,"보기 "+(covered?"일반":pane)].join(" · ");
+  fbSet("","");fbSend.textContent="보내기";fbSend.disabled=false;fbBusy=false;clearTimeout(fbTimer);
+  fbRefreshMailto();fbDialog.showModal();
+  setTimeout(()=>$("fbSubject").focus({preventScroll:true}),40);
+}
+function fbClose(){clearTimeout(fbTimer);if(fbDialog.open)fbDialog.close();}
+function fbDone(){
+  clearTimeout(fbTimer);fbBusy=false;fbSend.disabled=true;fbSend.textContent="보냄";
+  fbSet("보냈습니다. 알려 주셔서 고맙습니다!","");
+  for(const id of ["fbSubject","fbBody","fbEmail"])$(id).value="";
+  fbRefreshMailto();
+  fbTimer=setTimeout(fbClose,2600);
+}
+function fbFail(){
+  fbBusy=false;fbSend.disabled=false;fbSend.textContent="보내기";
+  fbSet("전송을 확인하지 못했습니다. 잠시 뒤 다시 보내 보시거나 아래 ‘메일 앱으로 보내기’를 이용해 주세요.","err");
+}
+async function fbSubmit(event){
+  event.preventDefault();
+  if(fbBusy)return;
+  const subject=$("fbSubject").value.trim(),body=$("fbBody").value.trim(),mail=$("fbEmail").value.trim();
+  if(!subject||!body){fbSet("제목과 내용을 적어 주세요.","err");(subject?$("fbBody"):$("fbSubject")).focus();return;}
+  if(mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)){fbSet("회신 이메일 주소 형식을 확인해 주세요.","err");$("fbEmail").focus();return;}
+  fbBusy=true;fbSend.disabled=true;fbSend.textContent="보내는 중…";fbSet("보내는 중입니다…","busy");
+  const data={"_subject":"[비품대장] "+subject.slice(0,80),"_template":"table","_captcha":"false",
+    "제목":subject,"내용":body,"보낸곳":"비품대장 미로 게임","페이지":$("fbPage").value,"환경":$("fbEnv").value};
+  if(mail){data.email=mail;data._replyto=mail;data["회신 이메일"]=mail;}
+  try{
+    const response=await fetch(FB_AJAX,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(data)});
+    const result=await response.json().catch(()=>({}));
+    if(response.ok&&String(result.success)==="true"){fbDone();return;}
+  }catch(error){}
+  fbFail();
+}
+$("feedbackOpen").onclick=fbOpen;
+$("feedbackClose").onclick=fbClose;
+fbForm.addEventListener("submit",fbSubmit);
+fbForm.addEventListener("input",()=>{fbRefreshMailto();if(fbStatus.className.includes("err"))fbSet("","");});
+fbDialog.addEventListener("click",event=>{if(event.target===fbDialog)fbClose();});
+fbDialog.addEventListener("cancel",()=>{clearTimeout(fbTimer);});
+fbDialog.addEventListener("close",()=>{if(!fbDialog.open)focusBoard();});
 $("copyTop").onclick=copyResult;
 $("fileName").onclick=()=>covered?reveal():hideSheet();$("cover").onclick=hideSheet;
 $("mainTab").onclick=()=>switchPane("main");$("storeTab").onclick=()=>switchPane("store");
@@ -260,6 +318,7 @@ function setZoom(delta){zoom=Math.min(140,Math.max(80,zoom+delta));document.docu
 $("zoomIn").onclick=()=>setZoom(10);$("zoomOut").onclick=()=>setZoom(-10);
 document.querySelectorAll("[data-key]").forEach(b=>b.onclick=()=>interact(b.dataset.key));
 window.addEventListener("keydown",e=>{
+  if(fbDialog.open)return;
   if(e.ctrlKey||e.metaKey||e.altKey||e.target.matches("input,textarea"))return;
   if(e.key==="Escape"){e.preventDefault();if(!e.repeat){if(covered)reveal();else hideSheet();}return;}
   if(covered||viewOnly())return;

@@ -42,3 +42,49 @@
   .formula output{scrollbar-width:none}.formula output::-webkit-scrollbar{display:none}
   #copyTop{padding-left:3px;padding-right:3px}
 }
+
+/* 접근성용 화면 밖 텍스트 */
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.noscript-note{margin:20px auto;max-width:720px;padding:16px 20px;border:1px solid var(--line);border-radius:4px;background:var(--pale);color:#33443a;font-size:.92rem;line-height:1.7}
+/* 제목 표시줄의 의견 버튼 */
+.titleact{margin-left:auto;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 10px;border:1px solid #6f9a83;border-radius:3px;color:#eef7f1;font-size:.79rem;line-height:1;white-space:nowrap;background:rgba(255,255,255,.07)}
+.titleact:hover{background:#2a6d4d;border-color:#a9cbb9}
+.titleact:focus-visible{outline:2px solid #cfe8d9;outline-offset:1px}
+.titlebar .local{margin-left:0}
+/* 의견 보내기 대화 상자 */
+.feedback{width:min(520px,calc(100vw - 28px));max-height:calc(100dvh - 32px);padding:0;border:1px solid #9fb4a6;border-radius:5px;background:#fff;color:#202824;box-shadow:0 18px 46px rgba(12,32,21,.34);overflow:auto;overscroll-behavior:contain}
+.feedback::backdrop{background:rgba(15,32,23,.44)}
+.feedback form{display:block;margin:0;padding:0}
+.fb-head{display:flex;align-items:center;gap:10px;padding:9px 10px 9px 16px;background:var(--forest);color:#fff}
+.fb-head h2{margin:0;font-size:.95rem;font-weight:600;letter-spacing:-.01em}
+.fb-close{margin-left:auto;width:28px;height:28px;border-radius:3px;color:#eaf3ec;font-size:1.2rem;line-height:1}
+.fb-close:hover{background:#2a6d4d}
+.fb-lead{margin:0;padding:14px 18px 4px;font-size:.84rem;line-height:1.6;color:#4a5b50}
+.fb-field{display:block;padding:9px 18px 0}
+.fb-label{display:block;margin-bottom:4px;font-size:.79rem;font-weight:600;color:#3d5145}
+.fb-label em{margin-left:4px;font-style:normal;font-weight:400;color:#77877c}
+.fb-field input,.fb-field textarea{display:block;width:100%;padding:7px 9px;border:1px solid #c3cec7;border-radius:3px;background:#fff;color:#202824;font:inherit;font-size:.86rem;line-height:1.5}
+.fb-field textarea{resize:vertical;min-height:88px}
+.fb-field input:focus,.fb-field textarea:focus{outline:none;border-color:#188653;box-shadow:0 0 0 2px rgba(24,134,83,.18)}
+.fb-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.fb-status{margin:0;padding:0 18px;font-size:.8rem;line-height:1.5;color:#255c3c;min-height:0}
+.fb-status:not(:empty){padding-top:10px}
+.fb-status.err{color:#9a3a1c}
+.fb-status.busy{color:#5a6b5f}
+.fb-foot{display:flex;align-items:center;gap:10px;padding:14px 18px 4px}
+.fb-mailto{margin-right:auto;font-size:.79rem;color:#31594a;text-decoration:underline;text-underline-offset:2px}
+.fb-mailto:hover{color:#188653}
+.fb-send{min-width:96px;min-height:34px;padding:6px 18px;border-radius:3px;background:var(--green);color:#fff;font-size:.86rem;font-weight:600}
+.fb-send:hover{background:#116140}
+.fb-send:disabled{opacity:.55;cursor:default}
+.fb-note{margin:0;padding:6px 18px 16px;font-size:.72rem;line-height:1.55;color:#718076}
+@media (pointer:coarse),(max-width:700px){
+  .titleact{padding:0 8px;height:24px;font-size:.74rem}
+  .feedback{width:calc(100vw - 16px);max-height:calc(100dvh - 16px)}
+  .fb-head{padding:8px 8px 8px 13px}
+  .fb-field,.fb-lead{padding-left:13px;padding-right:13px}
+  .fb-field textarea{min-height:78px}
+  .fb-foot{padding:12px 13px 4px;flex-wrap:wrap}
+  .fb-note{padding:6px 13px 14px}
+  .fb-field input,.fb-field textarea{font-size:16px}
+}
