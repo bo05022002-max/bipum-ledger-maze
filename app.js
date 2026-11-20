@@ -1,6 +1,6 @@
 import {letters,keys,rewards,rooms,roomOrder,dailyPlan,resolveDay,newRun,patrol,nextPatrol,advance,
-  hasItem,isBlock,move,use,actionLabel,resultLabel,elapsed,summary,objective,resume} from "./engine.mjs?v=20261120d";
-import {drawerRecords,saveReceipt} from "./records.mjs?v=20261120d";
+  hasItem,isBlock,move,use,actionLabel,resultLabel,elapsed,summary,objective,resume} from "./engine.mjs?v=20261120e";
+import {drawerRecords,saveReceipt} from "./records.mjs?v=20261120e";
 
 const $=id=>document.getElementById(id);
 const sheet=$("sheet"),vp=$("viewport");
@@ -16,7 +16,8 @@ let run=blank(), covered=false, pane="main", zoom=100, ribbon="home", notice=nul
 try{
   const saved=JSON.parse(sessionStorage.getItem(activeKey)||"null");
   if(saved?.day===run.day&&rooms[saved.room]&&saved.id&&saved.found&&Array.isArray(saved.firsts)){
-    run=saved;covered=run.started!==null;pane=run.room;
+    run=saved;covered=false;pane=run.room;
+    if(run.result==="won")copyMessage="";
   }
 }catch{}
 function persist(){try{sessionStorage.setItem(activeKey,JSON.stringify(run));}catch{}}
