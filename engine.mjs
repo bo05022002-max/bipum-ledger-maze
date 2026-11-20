@@ -20,6 +20,7 @@ export const rooms = {
     sub:"총무팀 / 사무용 비품 · 통로 F4 보관실 · H4 전산실",
     blocks:"B5 C5 G5 B6 D6 G6 B8 D8 E8 G8 B9 G9 B10 C10 D10 F10 G10",
     spots: {
+      A6:{type:"save"},
       C6:{type:"memo",text:"이번 달 마감은 마감 도장과 보안코드로 합니다. 마스터 열쇠는 보관실 서가 A9~C9, 보안코드는 전산실 서버 로그(F9)에 있습니다. 통로는 F4(보관실)·H4(전산실)."},
       F4:{type:"portal",to:"store",at:"A4"},
       H4:{type:"portal",to:"server",at:"G4"},

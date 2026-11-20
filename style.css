@@ -90,8 +90,10 @@
 }
 
 /* ── 2차: 4시트 방탈출 ── */
-.sheet td.wallcell{background:repeating-linear-gradient(45deg,#4f6055 0 6px,#47574d 6px 12px);border-right-color:#3d4c43;border-bottom-color:#3d4c43;color:transparent;cursor:default}
+.sheet td.wallcell{background:repeating-linear-gradient(45deg,#5b6c61 0 6px,#53645a 6px 12px);border-right-color:#42514a;border-bottom-color:#42514a;color:transparent;cursor:default}
 .sheet td.play{height:calc(30px * var(--cell-scale))}
+.restarticon{width:15px;height:15px;border:1.6px solid currentColor;border-radius:50%;border-top-color:transparent;transform:rotate(35deg)}
+.restarticon:after{content:"";position:absolute;right:-2px;top:-2px;border:3px solid transparent;border-bottom-color:currentColor;transform:rotate(20deg)}
 .sheet td.portalcell{background:#eaf2f9;color:#155c94;font-weight:700}
 .sheet td.savecell{background:#e4eefc;color:#1b4e86;font-weight:700}
 .sheet td.lockcell{background:#f7e9d8;color:#8a4a12;font-weight:700}
@@ -115,3 +117,8 @@
   .sheet td.savecell,.sheet td.portalcell{font-size:calc(.74rem * var(--cell-scale))}
   .touchline button#touchRestart{min-width:34px;border-left:1px solid #70917b}
 }
+
+/* 임시저장·획득 알림 */
+.toast{position:fixed;top:92px;left:50%;transform:translateX(-50%);z-index:30;max-width:calc(100vw - 32px);padding:7px 15px;border-radius:4px;background:#1b4e86;color:#fff;font-size:.82rem;line-height:1.35;box-shadow:0 6px 18px rgba(10,30,50,.28);text-align:center}
+.toast.gain{background:#1a6044}
+@media (pointer:coarse),(max-width:700px){.toast{top:auto;bottom:78px;font-size:.78rem;padding:6px 12px}}

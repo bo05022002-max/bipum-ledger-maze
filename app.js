@@ -20,6 +20,13 @@ try{
   }
 }catch{}
 function persist(){try{sessionStorage.setItem(activeKey,JSON.stringify(run));}catch{}}
+let toastTimer=0;
+function toast(text,kind){
+  const box=$("toast");
+  box.textContent=text;box.className="toast"+(kind?" "+kind:"");box.hidden=false;
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{box.hidden=true;},2800);
+}
 
 /* ── 시트에 깔리는 비품 데이터 ── */
 const data={
@@ -59,7 +66,7 @@ const data={
     ["서버 A","로그 수집","전산","랙 1","일 1회","정상","보존 90일"],
     ["서버 B","백업","전산","랙 1","주 1회","정상","외장 디스크"],
     ["스위치","포트 관리","네트워크","랙 2","월 1회","정상","—"],
-    ["보안문","출입 기록","보안","서버실","상시","잠금","마스터 열쇠"],
+    ["보안문","출입 기록","보안","서버실","상시","통제","마스터 열쇠"],
     ["랙 2","케이블 정리","전산","서버실","분기","정상","—"],
     ["서버 로그","접속 기록","보안","서버실","일 1회","확인","보존 30일"],
     ["UPS","전원","전산","전산실","월 1회","정상","배터리 교체"],
@@ -316,7 +323,7 @@ function resumeRun(){
   if(!resume(run)){restart();return;}
   pane=run.room;covered=false;notice=null;copyMessage="";returnUntil=0;
   statusNote="임시저장 지점에서 재개 · "+rooms[run.room].name+" "+run.cell;
-  persist();paint();vp.scrollTo(0,0);focusBoard(true);
+  toast("임시저장 지점에서 재개 · "+rooms[run.room].name+" "+run.cell);persist();paint();vp.scrollTo(0,0);focusBoard(true);
 
 }
 function hideSheet(){
@@ -338,6 +345,7 @@ function applyUse(out,now){
   if(out.type==="item"){
     const place=rooms[run.room].name+" "+run.cell;
     const record=saveReceipt(storage,memory,run,out.item,place,now);
+    toast(rewards[out.item].name+" 획득 · "+place,"gain");
     if(!record.persistent)$("localState").textContent="세션 기록";
     if(record.first)run.firsts.push(out.item);
     notice={room:run.room,cell:run.cell,until:now+2400,text:rewards[out.item].name+(record.first?" · 처음 발견":" · 발견")};
@@ -365,7 +373,9 @@ function interact(key){
   }else{
     const before=run.room+run.cell;
     const outcome=move(run,key,now);
-    if(outcome==="saved")statusNote=run.message;
+    if(outcome==="saved"){
+      statusNote=run.message;toast("💾 임시저장 완료 · "+rooms[run.room].name+" "+run.cell);
+    }
     else if(run.room+run.cell!==before)statusNote="";
   }
   pane=run.room;persist();paint(now);focusBoard();
