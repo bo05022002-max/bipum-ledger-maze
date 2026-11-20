@@ -274,7 +274,7 @@ function fbClose(){clearTimeout(fbTimer);clearTimeout(fbWatch);fbBusy=false;if(f
 function fbDone(){
   clearTimeout(fbTimer);clearTimeout(fbWatch);fbBusy=false;fbSend.disabled=true;fbSend.textContent="보냄";
   fbSet("보냈습니다. 알려 주셔서 고맙습니다!","");
-  for(const id of ["fbSubject","fbBody","fbEmail"])$(id).value="";
+  for(const id of ["fbSubject","fbBody","fbEmail","fbHoney"]){const field=$(id);if(field)field.value="";}
   fbRefreshMailto();
   fbTimer=setTimeout(fbClose,2600);
 }
