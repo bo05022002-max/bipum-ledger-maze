@@ -76,11 +76,16 @@ export function agent(day,{full=true,stepMs=110,maxTurns=2000}={}){
   let now=1_000_000;
   let path=planPath(s,{full});
   if(!path)return{result:"stuck",s,catches:0};
-  let idx=0, spins=0;
+  let idx=0, spins=0, catches=0;
   for(let turn=0;turn<maxTurns;turn++){
-    if(s.result==="won")return{result:"won",s,catches:s.caughts};
+    if(s.result==="won")return{result:"won",s,catches:s.caughts+catches};
     if(s.result==="caught"){
-      if(!resume(s))return{result:"dead",s,catches:s.caughts};
+      if(!resume(s)){
+        // 저장 지점이 없으면 플레이어처럼 처음부터 다시 시작한다.
+        const fresh=newRun(day,"agent-"+day);
+        Object.assign(s,fresh);
+        catches+=1;
+      }
       path=planPath(s,{full});idx=0;
       if(!path)return{result:"stuck",s,catches:s.caughts};
       continue;
@@ -89,15 +94,36 @@ export function agent(day,{full=true,stepMs=110,maxTurns=2000}={}){
     const action=path[idx];
     if(action.type==="move"){
       const next=cellAt(s.room,s.cell,action.key);
-      let guard=0;
-      while(next&&patrol(s.room,s.step,day)===next&&guard++<12){
+      const guarded=()=>next&&(patrol(s.room,s.step,day)===next||patrol(s.room,s.step+1,day)===next);
+      let wait=0;
+      while(guarded()&&wait++<14){
+        // 순찰이 지나갈 때까지 기다리되, 내 칸으로 들어오면 비켜선다.
+        if(patrol(s.room,s.step+1,day)===s.cell){
+          let moved=false;
+          for(const k of Object.keys(keys)){
+            const c=cellAt(s.room,s.cell,k);
+            if(!c||isBlock(s.room,c))continue;
+            if(patrol(s.room,s.step,day)===c||patrol(s.room,s.step+1,day)===c)continue;
+            if(rooms[s.room].spots[c]?.need)continue;
+            now+=stepMs;move(s,k,now);moved=true;break;
+          }
+          path=planPath(s,{full});idx=0;
+          if(!path)return{result:"stuck",s,catches:s.caughts};
+          if(moved)break;
+          now+=300;
+          if(s.result)break;
+          continue;
+        }
         advance(s,now);now+=300;
         if(s.result)break;
       }
-      if(s.result)continue;
-      now+=stepMs;
-      move(s,action.key,now);
-      idx++;
+      if(!s.result&&!guarded()&&idx<path.length){
+        now+=stepMs;move(s,action.key,now);idx++;
+      }else if(!s.result&&idx<path.length&&path[idx]?.type==="move"){
+        idx++;       // 통로가 계속 막혀 있으면 다음 판단으로 넘긴다
+      }else if(!s.result){
+        now+=stepMs;idx++;
+      }
     }else{
       now+=stepMs;
       use(s,now);

@@ -36,7 +36,7 @@ export const rooms = {
       A4:{type:"portal",to:"main",at:"F4"},
       F4:{type:"portal",to:"stock",at:"A4"},
       B8:{type:"memo",text:"확인대장(실사)은 마스터 열쇠로 엽니다. 마감 도장은 비품실 캐비닛 D7에 있고, 비품실 통로는 F4입니다."},
-      A8:{type:"save"},
+      A10:{type:"save"},
       E11:{type:"check",need:"key",label:"잠긴 확인대장",hint:"마스터 열쇠가 필요합니다 (보관실 A9~C9)."}
     },
     patrol:"F8 E8 D8 C8 D8 E8".split(" ")
@@ -63,7 +63,7 @@ export const rooms = {
       A4:{type:"portal",to:"stock",at:"H4"},
       G4:{type:"portal",to:"main",at:"H4"},
       C6:{type:"memo",text:"서버 로그는 보안문(F8) 뒤 F9에 있습니다. 문은 마스터 열쇠로 열립니다. 순찰에 걸리면 임시저장 지점에서 다시 시작합니다."},
-      G7:{type:"save"},
+      E7:{type:"save"},
       F8:{type:"lock",need:"key",label:"전산실 보안문",hint:"마스터 열쇠가 필요합니다."},
       F9:{type:"log",item:"code"}
     },

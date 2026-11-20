@@ -256,22 +256,25 @@ test("탐색한 경로를 실제 엔진으로 실행하면 순찰을 피해 마�
   }
 });
 
-test("적발되더라도 Enter로 임시저장 지점에서 이어갈 수 있다", () => {
+test("임시저장 칸을 밟으면 저장되고, 적발 뒤 그 자리에서 이어간다", () => {
   const s = newRun("2026-11-20", "resume-run");
-  s.room = "server"; s.cell = "G7";
-  s.found = {marker:"비품대장 C6", key:"보관실 A9", stamp:"비품실 D7"};
-  move(s, "ArrowLeft", 1000);           // G7 → F7 (안전)
-  const spot = rooms.server.spots.G7;
-  assert.equal(spot.type, "save");
-  s.save = null;
-  s.room = "server"; s.cell = "G7"; s.cell = "G8";
-  // 임시저장 지점을 다시 밟아 저장한다
-  s.cell = "G7";
-  move(s, "ArrowDown", 1100);           // G7 → G8, 저장 아님(이미 지나침)
-  s.room = "server"; s.cell = "G8";
-  s.save = null;
-  s.result = "caught"; s.ended = 2000;
-  assert.equal(resume(s), false, "저장 지점이 없으면 재개 불가");
+  s.room = "store"; s.cell = "A9";
+  s.found = {marker:"비품대장 C6", key:"보관실 A9"};
+  const outcome = move(s, "ArrowDown", 1_000);       // A9 → A10 (임시저장)
+  assert.equal(outcome, "saved", "임시저장 칸에서 저장");
+  assert.ok(s.save, "저장 지점이 남아야 함");
+  assert.equal(s.save.cell, "A10");
+  s.result = "caught"; s.ended = 4_000;              // 적발
+  assert.equal(resume(s), true);
+  assert.equal(s.result, null);
+  assert.equal(s.cell, "A10");
+  assert.ok(hasItem(s, "key"), "저장 시점의 아이템 유지");
+});
+
+test("저장 지점이 없으면 재개하지 않는다", () => {
+  const s = newRun("2026-11-20", "no-save");
+  s.result = "caught";
+  assert.equal(resume(s), false);
 });
 
 test("임시저장 → 적발 → 재개는 수집 상태를 되돌린다", () => {
