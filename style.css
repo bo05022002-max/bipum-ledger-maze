@@ -131,3 +131,4 @@
   .tabs::-webkit-scrollbar{display:none}
   .tabs button{min-width:56px;padding:0 8px}
 }
+.resultline a.resultlink{margin-left:12px;font-size:.8rem;color:#175e39;text-decoration:underline}

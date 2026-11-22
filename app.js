@@ -233,6 +233,7 @@ function paintBoard(room,now){
       result.append(el("span","마감 기록　"+resultLabel(run)+"　·　수집 "+collectionCount()+"/"+Object.keys(rewards).length+"　·　"+elapsed(run,now)+"초"));
       if(run.result==="won"){
         const b=el("button",copyMessage||"결과 복사","copybtn");b.id="copyResult";b.onclick=copyResult;result.append(b);
+        const a=el("a","업무용 엑셀 템플릿 보기","resultlink");a.href="https://litt.ly/pulda?utm_source=game&utm_medium=result";a.target="_blank";a.rel="noopener";result.append(a);
       }else{
         result.append(el("span",run.save?"　·　Enter로 "+rooms[run.save.room].name+" "+run.save.cell+"에서 재개":"　·　Enter로 다시 시작","resumetip"));
       }
